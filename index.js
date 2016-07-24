@@ -61,6 +61,7 @@ WeatherAlert.prototype.init = function (config) {
         deviceId: "WeatherAlert_" + self.id,
         defaults: {
             metrics: {
+                probeTitle: 'WeatherAlert',
                 timestamp: 0,
                 title: self.langFile.m_title,
                 level: 0,
@@ -116,7 +117,6 @@ WeatherAlert.prototype.query = function(method,args,callback) {
         url = url + '&' + key + '=' + value;
     });
     
-    self.log(url);
     http.request({
         url: url,
         async: true,
@@ -219,7 +219,7 @@ WeatherAlert.prototype.processAlerts = function(response) {
     self.vDev.set('metrics:level',severity);
     self.vDev.set('metrics:icon',self.imagePath+'/icon_severity'+severity+'.png');
     self.vDev.set('metrics:type',type);
-    self.vDev.set('metrics:type',text);
+    self.vDev.set('metrics:text',text);
 };
 
 WeatherAlert.prototype.getSeverity = function(levelName) {
