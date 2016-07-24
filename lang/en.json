@@ -1,0 +1,22 @@
+{
+   "altitude_helper" : "Optional location elevation above sea leves in meters",
+   "altitude_label" : "Altitude",
+   "coordinate_helper" : "In decimal notation",
+   "error_fetch" : "Could not load weather alerts.",
+   "latitude_label" : "Latitude",
+   "longitude_label" : "Longitude",
+   "m_descr" : " severe weather alerts TODO",
+   "m_title" : "Weather Alerts",
+   "type_forest_fire" : "Forest fire",
+   "type_freezing_rain" : "Freezing rain",
+   "type_frost" : "Frost",
+   "type_glaze" : "Glaze",
+   "type_heat" : "Heat",
+   "type_label" : "Alert type",
+   "type_rain" : "Rain",
+   "type_snow" : "Snow",
+   "type_soil_frost" : "Soil frost",
+   "type_storm" : "Storm",
+   "type_thunderstorm" : "Thunderstorm",
+   "type_unknown" : "Unknown/Other"
+}
