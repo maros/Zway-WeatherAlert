@@ -73,7 +73,7 @@ WeatherAlert.prototype.init = function (config) {
             if (command === 'update') {
                 var timestamp = this.get('metrics:timestamp') - (10 * 60);
                 if (timestamp < parseInt((new Date()).getTime() / 1000)) {
-                    //self.getAlerts();
+                    self.getAlerts();
                 }
             }
         },
@@ -187,27 +187,22 @@ WeatherAlert.prototype.processAlerts = function(response) {
 
     self.log('Process alerts');
     _.each(response.results,function(result) {
-        console.logJS(result);
         if (result.dtgStart > currentTime
             || result.dtgEnd < currentTime) {
-            self.log('SKIP TIME');
             return;
         }
         if (typeof(self.config.altitude) !== 'undefined'
             && (self.config.altitude < result.payload.altMin || self.config.altitude > result.payload.altMax)) {
-            self.log('SKIP ALT');
             return;
         }
         
         if (typeof(self.config.type) !== 'undefined'
             && self.config.type.length > 0
             && _.indexOf(self.config.type,self.type[ result.type - 1 ]) === -1) {
-            self.log('SKIP TYPE'+result.type+' -> '+self.type[ result.type - 1 ]);
             return;
         }
         
         var resultSeverity = self.getSeverity(result.payload.levelName);
-        self.log(result.payload.levelName+'->'+resultSeverity+'->'+self.type[ result.type - 1 ]);
         if (resultSeverity > alert.severity) {
             severity  = resultSeverity;
             type      = self.type[ result.type - 1 ];
@@ -231,6 +226,6 @@ WeatherAlert.prototype.getSeverity = function(levelName) {
     } else {
         return self.severity[levels[2]];
     }
-    self.log('Could not parse levelName: '+levelName);
+    self.error('Could not parse levelName: '+levelName);
     return 0;
 };
