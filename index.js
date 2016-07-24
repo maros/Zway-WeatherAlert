@@ -13,30 +13,31 @@ function WeatherAlert (id, controller) {
     // Call superconstructor first (AutomationModule)
     WeatherAlert.super_.call(this, id, controller);
     
-    this.baseurl    = 'http://feed.alertspro.meteogroup.com/AlertsPro/AlertsProPollService.php';
-    this.severity   = {
-        "green":    0,
-        "yellow":   2,
-        "orange":   3,
-        "red":      4,
-        "violet":   5
-    };
-    this.type      = [
-        "unknown",
-        "storm",
-        "snow",
-        "rain",
-        "frost",
-        "forest_fire",
-        "thunderstorm",
-        "glaze",
-        "heat",
-        "freezing_rain",
-        "soil_frost"
-    ];
-    
+    this.baseurl    = 'http://feed.alertspro.meteogroup.com/AlertsPro/AlertsProPollService.php';    
     this.areaId     = undefined;
 }
+
+WeatherAlert.prototype.allSeverities = {
+    "green":    0,
+    "yellow":   2,
+    "orange":   3,
+    "red":      4,
+    "violet":   5
+};
+
+WeatherAlert.prototype.allTypes = [
+    "unknown",
+    "storm",
+    "snow",
+    "rain",
+    "frost",
+    "forest_fire",
+    "thunderstorm",
+    "glaze",
+    "heat",
+    "freezing_rain",
+    "soil_frost"
+];
 
 inherits(WeatherAlert, BaseModule);
 
@@ -50,6 +51,10 @@ WeatherAlert.prototype.init = function (config) {
     WeatherAlert.super_.prototype.init.call(this, config);
     
     var self = this;
+    var type = self.config.type;
+    if (type.length === 0) {
+        type = self.allTypes;
+    }
     
     // Create vdev
     self.vDev = self.controller.devices.create({
@@ -65,7 +70,7 @@ WeatherAlert.prototype.init = function (config) {
             }
         },
         overlay: {
-            //alertType: self.config.type,
+            alertType: type,
             probeType: 'weather_alert',
             deviceType: 'sensorMultilevel'
         },
@@ -198,14 +203,14 @@ WeatherAlert.prototype.processAlerts = function(response) {
         
         if (typeof(self.config.type) !== 'undefined'
             && self.config.type.length > 0
-            && _.indexOf(self.config.type,self.type[ result.type - 1 ]) === -1) {
+            && _.indexOf(self.config.type,self.allTypes[ result.type - 1 ]) === -1) {
             return;
         }
         
         var resultSeverity = self.getSeverity(result.payload.levelName);
-        if (resultSeverity > alert.severity) {
+        if (resultSeverity > severity) {
             severity  = resultSeverity;
-            type      = self.type[ result.type - 1 ];
+            type      = self.allTypes[ result.type - 1 ];
             text      = result.payload.shortText;
         }
     });
@@ -224,7 +229,7 @@ WeatherAlert.prototype.getSeverity = function(levelName) {
     } else if (levels[1] === 'forewarn') {
         return 2;
     } else {
-        return self.severity[levels[2]];
+        return self.allSeverities[levels[2]];
     }
     self.error('Could not parse levelName: '+levelName);
     return 0;
