@@ -13,31 +13,30 @@ function WeatherAlert (id, controller) {
     // Call superconstructor first (AutomationModule)
     WeatherAlert.super_.call(this, id, controller);
     
+    this.type       = [];
     this.baseurl    = 'http://feed.alertspro.meteogroup.com/AlertsPro/AlertsProPollService.php';    
     this.areaId     = undefined;
+    this.allTypes   = [
+         "unknown",
+         "storm",
+         "snow",
+         "rain",
+         "frost",
+         "forest_fire",
+         "thunderstorm",
+         "glaze",
+         "heat",
+         "freezing_rain",
+         "soil_frost"
+    ];
+    this.allSeverities = {
+        "green":    0,
+        "yellow":   2,
+        "orange":   3,
+        "red":      4,
+        "violet":   5
+    };
 }
-
-WeatherAlert.prototype.allSeverities = {
-    "green":    0,
-    "yellow":   2,
-    "orange":   3,
-    "red":      4,
-    "violet":   5
-};
-
-WeatherAlert.prototype.allTypes = [
-    "unknown",
-    "storm",
-    "snow",
-    "rain",
-    "frost",
-    "forest_fire",
-    "thunderstorm",
-    "glaze",
-    "heat",
-    "freezing_rain",
-    "soil_frost"
-];
 
 inherits(WeatherAlert, BaseModule);
 
@@ -51,9 +50,9 @@ WeatherAlert.prototype.init = function (config) {
     WeatherAlert.super_.prototype.init.call(this, config);
     
     var self = this;
-    var type = self.config.type;
-    if (type.length === 0) {
-        type = self.allTypes;
+    self.type = self.config.type;
+    if (self.type.length === 0) {
+        self.type = self.allTypes;
     }
     
     // Create vdev
@@ -71,7 +70,7 @@ WeatherAlert.prototype.init = function (config) {
             }
         },
         overlay: {
-            alertType: type,
+            alertType: self.type,
             probeType: 'weather_alert',
             deviceType: 'sensorMultilevel'
         },
@@ -87,7 +86,7 @@ WeatherAlert.prototype.init = function (config) {
     });
     
     setTimeout(_.bind(self.getAreaId,self),1000 * 15);
-    self.interval = setInterval(_.bind(self.getAlerts,self,'interval'),30*60*1000);
+    self.interval = setInterval(_.bind(self.getAlerts,self,'interval'),15*60*1000);
 };
 
 WeatherAlert.prototype.stop = function () {
@@ -129,7 +128,6 @@ WeatherAlert.prototype.query = function(method,args,callback) {
         },
         error: function(response) {
             self.error("Update error: "+response.statusText);
-            console.logJS(response);
             self.controller.addNotification(
                 "error", 
                 self.langFile.error_fetch,
@@ -192,6 +190,9 @@ WeatherAlert.prototype.processAlerts = function(response) {
 
     self.log('Process alerts');
     _.each(response.results,function(result) {
+        var resultType = self.allTypes[ result.type - 1 ];
+        var resultSeverity = self.getSeverity(result.payload.levelName);
+        
         if (result.dtgStart > currentTime
             || result.dtgEnd < currentTime) {
             return;
@@ -200,17 +201,13 @@ WeatherAlert.prototype.processAlerts = function(response) {
             && (self.config.altitude < result.payload.altMin || self.config.altitude > result.payload.altMax)) {
             return;
         }
-        
-        if (typeof(self.config.type) !== 'undefined'
-            && self.config.type.length > 0
-            && _.indexOf(self.config.type,self.allTypes[ result.type - 1 ]) === -1) {
+        if (_.indexOf(self.type,resultType) === -1) {
             return;
         }
         
-        var resultSeverity = self.getSeverity(result.payload.levelName);
         if (resultSeverity > severity) {
             severity  = resultSeverity;
-            type      = self.allTypes[ result.type - 1 ];
+            type      = resultType;
             text      = result.payload.shortText;
         }
     });
