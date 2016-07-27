@@ -220,11 +220,13 @@ WeatherAlert.prototype.processAlerts = function(response) {
 };
 
 WeatherAlert.prototype.getSeverity = function(levelName) {
+    var self = this;
+    
     var levels = levelName.split('_');
     if (levels[0] === 'notice') {
         return 1;
     } else if (levels[1] === 'forewarn') {
-        return 2;
+        return Math.max(2,self.allSeverities[levels[2]] - 1);
     } else {
         return self.allSeverities[levels[2]];
     }
