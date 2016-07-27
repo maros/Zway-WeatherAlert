@@ -1,12 +1,20 @@
 # Zway-WeatherAlert
 
-Zway automation base module for severe weather alerts
+Zway automation module for severe weather alerts
 
 # Configuration
 
 ## latitude,longitude
 
 Geo coordinates for the used position
+
+## altitude
+
+Location alzitude above sea level in meters (optional)
+
+## type
+
+List of alert types
 
 # Events
 
