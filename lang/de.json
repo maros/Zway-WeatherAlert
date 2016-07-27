@@ -1,0 +1,21 @@
+{
+   "altitude_helper" : "Höhe über dem Meeresspiegel in Metern (optional)",
+   "altitude_label" : "Höhe",
+   "coordinate_helper" : "In Dezimaler Notation",
+   "latitude_label" : "Geografische Breite",
+   "longitude_label" : "Geografische Länge",
+   "m_descr" : " severe weather alerts TODO",
+   "m_title" : "Weatherwarnungen",
+   "type_forest_fire" : "Waldbrand",
+   "type_freezing_rain" : "Gefrierender Regen",
+   "type_frost" : "Frost",
+   "type_glaze" : "Glatteis",
+   "type_heat" : "Hitze",
+   "type_label" : "Art des Unwetter",
+   "type_rain" : "Regen",
+   "type_snow" : "Schnee",
+   "type_soil_frost" : "Bodenfrost",
+   "type_storm" : "Sturm",
+   "type_thunderstorm" : "Gewitter",
+   "type_unknown" : "Unbekannt/Sonstige"
+}
