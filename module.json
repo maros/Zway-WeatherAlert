@@ -1,89 +1,91 @@
 {
-    "author":"Maroš Kollár",
-    "category":"environment",
-    "defaults":{
-        "description":"__m_descr__",
-        "title":"__m_title__"
-    },
-    "dependencies":["BaseModule"],
-    "homepage":"https://github.com/maros/Zway-WeatherAlert",
-    "icon":"icon.png",
-    "maturity":"stable",
-    "moduleName":"WeatherAlert",
-    "options":{
-        "fields":{
-            "latitude" : {
-                "helper" : "__coordinate_helper__",
-                "label" : "__latitude_label__",
-                "order" : 2
-             },
-             "longitude" : {
-                "helper" : "__coordinate_helper__",
-                "label" : "__longitude_label__",
-                "order" : 3
-             },
-             "altitude" : {
-                 "helper" : "__altitude_helper__",
-                 "label" : "__altitude_label__",
-                 "order" : 4
-             },
-             "type": {
-                 "label" : "__type_label__",
-                 "optionLabels" : [
-                    "__type_unknown__",
-                    "__type_storm__",
-                    "__type_snow__",
-                    "__type_rain__",
-                    "__type_frost__",
-                    "__type_forest_fire__",
-                    "__type_thunderstorm__",
-                    "__type_glaze__",
-                    "__type_heat__",
-                    "__type_freezing_rain__",
-                    "__type_soil_frost__"
-                 ],
-                 "order" : 1
-             }
-        }
-    },
-    "repository":{
-        "source":"https://github.com/maros/Zway-WeatherAlert",
-        "type":"git"
-    },
-    "schema":{
-        "properties":{
-            "latitude" : {
-                "type" : "number",
-                "required":true
-             },
-             "longitude" : {
-                "type" : "number",
-                "required":true
-             },
-             "altitude" : {
-                "type" : "number"
-             },
-             "type": {
-                "enum" : [
-                  "unknown",
-                  "storm",
-                  "snow",
-                  "rain",
-                  "frost",
-                  "forest_fire",
-                  "thunderstorm",
-                  "glaze",
-                  "heat",
-                  "freezing_rain",
-                  "soil_frost"
-                ],
-                "required" : true,
-                "type" : "array"
-            }
-        },
-        "required":true,
-        "type":"object"
-    },
-    "singleton":false,
-    "version":"1.00"
+   "author" : "Maroš Kollár",
+   "category" : "environment",
+   "defaults" : {
+      "description" : "__m_descr__",
+      "title" : "__m_title__"
+   },
+   "dependencies" : [
+      "BaseModule"
+   ],
+   "homepage" : "https://github.com/maros/Zway-WeatherAlert",
+   "icon" : "icon.png",
+   "maturity" : "stable",
+   "moduleName" : "WeatherAlert",
+   "options" : {
+      "fields" : {
+         "altitude" : {
+            "helper" : "__altitude_helper__",
+            "label" : "__altitude_label__",
+            "order" : 4
+         },
+         "latitude" : {
+            "helper" : "__coordinate_helper__",
+            "label" : "__latitude_label__",
+            "order" : 2
+         },
+         "longitude" : {
+            "helper" : "__coordinate_helper__",
+            "label" : "__longitude_label__",
+            "order" : 3
+         },
+         "type" : {
+            "label" : "__type_label__",
+            "optionLabels" : [
+               "__type_unknown__",
+               "__type_storm__",
+               "__type_snow__",
+               "__type_rain__",
+               "__type_frost__",
+               "__type_forest_fire__",
+               "__type_thunderstorm__",
+               "__type_glaze__",
+               "__type_heat__",
+               "__type_freezing_rain__",
+               "__type_soil_frost__"
+            ],
+            "order" : 1
+         }
+      }
+   },
+   "repository" : {
+      "source" : "https://github.com/maros/Zway-WeatherAlert",
+      "type" : "git"
+   },
+   "schema" : {
+      "properties" : {
+         "altitude" : {
+            "type" : "number"
+         },
+         "latitude" : {
+            "required" : true,
+            "type" : "number"
+         },
+         "longitude" : {
+            "required" : true,
+            "type" : "number"
+         },
+         "type" : {
+            "enum" : [
+               "unknown",
+               "storm",
+               "snow",
+               "rain",
+               "frost",
+               "forest_fire",
+               "thunderstorm",
+               "glaze",
+               "heat",
+               "freezing_rain",
+               "soil_frost"
+            ],
+            "required" : true,
+            "type" : "array"
+         }
+      },
+      "required" : true,
+      "type" : "object"
+   },
+   "singleton" : false,
+   "version" : "1.00"
 }
