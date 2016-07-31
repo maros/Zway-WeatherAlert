@@ -5,7 +5,7 @@
    "error_fetch" : "Could not load weather alerts.",
    "latitude_label" : "Latitude",
    "longitude_label" : "Longitude",
-   "m_descr" : " severe weather alerts TODO",
+   "m_descr" : "Checks the selected severe weather conditions and displays alert levels ranging from 0 (no alert) to 5 (extreme). Weather alerts are available for most western European countries. <br>Check <a href=https://github.com/maros/Zway-WeatherAlert/blob/master/README.md>github.com/maros/Zway-WeatherAlert</a> for detailed documentation.",
    "m_title" : "Weather Alerts",
    "type_forest_fire" : "Forest fire",
    "type_freezing_rain" : "Freezing rain",

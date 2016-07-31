@@ -1,8 +1,8 @@
 # Zway-WeatherAlert
 
-Zway automation module for severe weather alerts. Alert levels are by a
-number ranging from 0 to 5. Weather alerts are available for the following
-countries.
+Zway automation module for severe weather alerts. Displays alert levels
+ranging from 0 (no alert) to 5 (exterme) via a multilevel sensor virtual 
+device. Weather alerts are available for the following countries.
 
 * Austria
 * Belgium
@@ -22,11 +22,20 @@ countries.
 * Spain
 * United Kingdom
 
+Alert levels translate to the following contitions
+
+* 0: No alert (green)
+* 1: Active weather notice (green)
+* 2: Severe weather forewarning (yellow)
+* 3: Severe weather warning (moderate, orange)
+* 4: Severe weather warning (heavy, red)
+* 5: Severe weather warning (extreme, violet)
+
 # Configuration
 
 ## latitude,longitude
 
-Geo coordinates for the used position
+Geo coordinates for the current position in decimal notation.
 
 ## altitude
 
@@ -59,7 +68,7 @@ level for the selected alert types. The following metrics are written
 * level: Alert severity ranging from 0 to 5
 * type: Alert type. If multiple alerts are in place only the type of the 
 alert with the highest level is displayed
-* text: Alert text description
+* text: Alert text description.
 
 # Installation
 
