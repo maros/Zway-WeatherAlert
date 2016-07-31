@@ -13,6 +13,7 @@ function WeatherAlert (id, controller) {
     // Call superconstructor first (AutomationModule)
     WeatherAlert.super_.call(this, id, controller);
     
+    this.callback   = undefined;
     this.type       = [];
     this.baseurl    = 'http://feed.alertspro.meteogroup.com/AlertsPro/AlertsProPollService.php';    
     this.areaId     = undefined;
@@ -36,6 +37,14 @@ function WeatherAlert (id, controller) {
         "red":      4,
         "violet":   5
     };
+    this.checkInterval = [
+        60,
+        30,
+        15,
+        5,
+        5,
+        5
+    ];
 }
 
 inherits(WeatherAlert, BaseModule);
@@ -85,8 +94,8 @@ WeatherAlert.prototype.init = function (config) {
         moduleId: self.id
     });
     
+    self.callback = _.bind(self.getAlerts,self,'interval');
     setTimeout(_.bind(self.getAreaId,self),1000 * 15);
-    self.interval = setInterval(_.bind(self.getAlerts,self,'interval'),15*60*1000);
 };
 
 WeatherAlert.prototype.stop = function () {
@@ -97,10 +106,8 @@ WeatherAlert.prototype.stop = function () {
         self.vDev = undefined;
     }
     
-    if (typeof(self.interval) !== 'undefined') {
-        clearInterval(self.interval);
-        self.interval = undefined;
-    }
+    self.stopTimeout();
+    self.callback = undefined;
     
     WeatherAlert.super_.prototype.stop.call(this);
 };
@@ -217,6 +224,12 @@ WeatherAlert.prototype.processAlerts = function(response) {
     self.vDev.set('metrics:icon',self.imagePath+'/icon_severity'+severity+'.png');
     self.vDev.set('metrics:type',type);
     self.vDev.set('metrics:text',text);
+    
+    self.stopTimeout();
+    self.timeout = setTimeout(
+        self.callback,
+        1000*60*self.checkInterval[severity]
+    );
 };
 
 WeatherAlert.prototype.getSeverity = function(levelName) {
@@ -232,4 +245,13 @@ WeatherAlert.prototype.getSeverity = function(levelName) {
     }
     self.error('Could not parse levelName: '+levelName);
     return 0;
+};
+
+WeatherAlert.prototype.stopTimeout = function() {
+    var self = this;
+    
+    if (typeof(self.timeout) !== 'undefined') {
+        clearTimeout(self.timeout);
+        self.timeout = undefined;
+    }
 };
