@@ -1,6 +1,26 @@
 # Zway-WeatherAlert
 
-Zway automation module for severe weather alerts
+Zway automation module for severe weather alerts. Alert levels are by a
+number ranging from 0 to 5. Weather alerts are available for the following
+countries.
+
+* Austria
+* Belgium
+* Denmark
+* Finland
+* France
+* Germany
+* Ireland
+* Italy
+* Liechtenstein
+* Luxembourg
+* Netherlands
+* Norway
+* Portugal
+* Sweden
+* Switzerland
+* Spain
+* United Kingdom
 
 # Configuration
 
@@ -10,20 +30,36 @@ Geo coordinates for the used position
 
 ## altitude
 
-Location alzitude above sea level in meters (optional)
+Location altitude above sea level in meters (optional)
 
 ## type
 
-List of alert types
+List of multiple alert types. The following alert types are available
+
+* Storm
+* Snow
+* Rain
+* Frost
+* Forest Fire
+* Thunderstorm
+* Glaze
+* Heat
+* Freezing Rain
+* Soil Frost
 
 # Events
 
-TODO
+No events are emitted.
 
 # Virtual Devices
 
 This module creates a virtual binary sensor that displays the current alert
-situation.
+level for the selected alert types. The following metrics are written
+
+* level: Alert severity ranging from 0 to 5
+* type: Alert type. If multiple alerts are in place only the type of the 
+alert with the highest level is displayed
+* text: Alert text description
 
 # Installation
 
