@@ -239,7 +239,7 @@ WeatherAlert.prototype.getSeverity = function(levelName) {
     if (levels[0] === 'notice') {
         return 1;
     } else if (levels[1] === 'forewarn') {
-        return Math.max(2,self.allSeverities[levels[2]] - 1);
+        return 2;
     } else {
         return self.allSeverities[levels[2]];
     }
