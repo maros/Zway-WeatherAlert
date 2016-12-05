@@ -1,7 +1,7 @@
 # Zway-WeatherAlert
 
 Zway automation module for severe weather alerts. Displays alert levels
-ranging from 0 (no alert) to 5 (exterme) via a multilevel sensor virtual 
+ranging from 0 (no alert) to 5 (exterme) via a multilevel sensor virtual
 device. Weather alerts are available for the following countries.
 
 * Austria
@@ -66,7 +66,7 @@ This module creates a virtual binary sensor that displays the current alert
 level for the selected alert types. The following metrics are written
 
 * level: Alert severity ranging from 0 to 5
-* type: Alert type. If multiple alerts are in place only the type of the 
+* type: Alert type. If multiple alerts are in place only the type of the
 alert with the highest level is displayed
 * text: Alert text description.
 
@@ -75,11 +75,11 @@ alert with the highest level is displayed
 Install the BaseModule from https://github.com/maros/Zway-BaseModule first
 
 The prefered way of installing this module is via the "Zwave.me App Store"
-available in 2.2.0 and higher. For stable module releases no access token is 
-required. If you want to test the latest pre-releases use 'k1_beta' as 
+available in 2.2.0 and higher. For stable module releases no access token is
+required. If you want to test the latest pre-releases use 'k1_beta' as
 app store access token.
 
-For developers and users of older Zway versions installation via git is 
+For developers and users of older Zway versions installation via git is
 recommended.
 
 ```shell
@@ -103,7 +103,7 @@ git checkout -b master --track origin/master
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or any 
+the Free Software Foundation, either version 3 of the License, or any
 later version.
 
 Alert icon by Thomas Le Bas from the Noun Project

@@ -12,10 +12,10 @@ Description:
 function WeatherAlert (id, controller) {
     // Call superconstructor first (AutomationModule)
     WeatherAlert.super_.call(this, id, controller);
-    
+
     this.callback   = undefined;
     this.type       = [];
-    this.baseurl    = 'http://feed.alertspro.meteogroup.com/AlertsPro/AlertsProPollService.php';    
+    this.baseurl    = 'http://feed.alertspro.meteogroup.com/AlertsPro/AlertsProPollService.php';
     this.areaId     = undefined;
     this.allTypes   = [
          "unknown",
@@ -57,13 +57,13 @@ _module = WeatherAlert;
 
 WeatherAlert.prototype.init = function (config) {
     WeatherAlert.super_.prototype.init.call(this, config);
-    
+
     var self = this;
     self.type = self.config.type;
     if (self.type.length === 0) {
         self.type = self.allTypes;
     }
-    
+
     // Create vdev
     self.vDev = self.controller.devices.create({
         deviceId: "WeatherAlert_" + self.id,
@@ -93,22 +93,22 @@ WeatherAlert.prototype.init = function (config) {
         },
         moduleId: self.id
     });
-    
+
     self.callback = _.bind(self.getAlerts,self,'interval');
     setTimeout(_.bind(self.getAreaId,self),1000 * 15);
 };
 
 WeatherAlert.prototype.stop = function () {
     var self = this;
-    
+
     if (self.vDev) {
         self.controller.devices.remove(self.vDev.id);
         self.vDev = undefined;
     }
-    
+
     self.stopTimeout();
     self.callback = undefined;
-    
+
     WeatherAlert.super_.prototype.stop.call(this);
 };
 
@@ -122,7 +122,7 @@ WeatherAlert.prototype.query = function(method,args,callback) {
     _.each(args,function(value,key){
         url = url + '&' + key + '=' + value;
     });
-    
+
     http.request({
         url: url,
         async: true,
@@ -136,9 +136,9 @@ WeatherAlert.prototype.query = function(method,args,callback) {
         error: function(response) {
             self.error("Update error: "+response.statusText);
             self.controller.addNotification(
-                "error", 
+                "error",
                 self.langFile.error_fetch,
-                "module", 
+                "module",
                 self.constructor.name
             );
         }
@@ -147,13 +147,13 @@ WeatherAlert.prototype.query = function(method,args,callback) {
 
 WeatherAlert.prototype.getAreaId = function() {
     var self = this;
-    
+
     if (typeof(self.config.latitude) === 'undefined'
         || typeof(self.config.longitude) === 'undefined') {
         self.error('Latitude and/or longitude missing');
         return;
     }
-    
+
     self.log('Fetch Area ID');
     // Get coordinates
     self.query(
@@ -170,16 +170,16 @@ WeatherAlert.prototype.getAreaId = function() {
 
 WeatherAlert.prototype.getAlerts = function() {
     var self = this;
-    
+
     if (typeof(self.areaId) === 'undefined') {
         self.log('No Area ID available yet');
         self.getAreaId();
         return;
     }
-    
+
     var alerts      = [];
     self.log('Fetch alerts for areaID '+self.areaId);
-    
+
     self.query(
         'getWarning',
         { areaID: self.areaId, language: self.controller.defaultLang },
@@ -189,7 +189,7 @@ WeatherAlert.prototype.getAlerts = function() {
 
 WeatherAlert.prototype.processAlerts = function(response) {
     var self = this;
-    
+
     var severity = 0;
     var type = null;
     var text = null;
@@ -199,7 +199,7 @@ WeatherAlert.prototype.processAlerts = function(response) {
     _.each(response.results,function(result) {
         var resultType = self.allTypes[ result.type - 1 ];
         var resultSeverity = self.getSeverity(result.payload.levelName);
-        
+
         if (result.dtgStart > currentTime
             || result.dtgEnd < currentTime) {
             return;
@@ -211,20 +211,20 @@ WeatherAlert.prototype.processAlerts = function(response) {
         if (_.indexOf(self.type,resultType) === -1) {
             return;
         }
-        
+
         if (resultSeverity > severity) {
             severity  = resultSeverity;
             type      = resultType;
             text      = result.payload.shortText;
         }
     });
-    
+
     self.vDev.set("metrics:timestamp",currentTime);
     self.vDev.set('metrics:level',severity);
     self.vDev.set('metrics:icon',self.imagePath+'/icon_severity'+severity+'.png');
     self.vDev.set('metrics:type',type);
     self.vDev.set('metrics:text',text);
-    
+
     self.stopTimeout();
     self.timeout = setTimeout(
         self.callback,
@@ -234,7 +234,7 @@ WeatherAlert.prototype.processAlerts = function(response) {
 
 WeatherAlert.prototype.getSeverity = function(levelName) {
     var self = this;
-    
+
     var levels = levelName.split('_');
     if (levels[0] === 'notice') {
         return 1;
@@ -249,7 +249,7 @@ WeatherAlert.prototype.getSeverity = function(levelName) {
 
 WeatherAlert.prototype.stopTimeout = function() {
     var self = this;
-    
+
     if (typeof(self.timeout) !== 'undefined') {
         clearTimeout(self.timeout);
         self.timeout = undefined;
